@@ -10,7 +10,7 @@
     public class Customer
     {
 
-        // включая его имя, фамилию, дату рождения, пол и другую персональную информацию.
+        public int CustomerId { get; set; }
         public string FirstName { get; set; } 
         public string LastName { get; set; }
 

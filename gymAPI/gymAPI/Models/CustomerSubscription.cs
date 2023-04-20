@@ -9,7 +9,7 @@
 
     public class CustomerSubscription
     {
-        
+        public int CustomerSubscriptionId { get; set; }
         public Subscription Subscription { get; set; }
         public int Price { get; set; }
 
@@ -17,36 +17,36 @@
 
         public DateTime ExpirationDay { get; set; }
 
-        public CustomerSubscription(Subscription subscription)
-        {
-            this.Subscription = subscription;
-            this.Price = (int)subscription;
-            PurschaseDay = DateTime.Now;
-            ExpirationDay = Expiration(PurschaseDay);
+        //public CustomerSubscription(Subscription subscription)
+        //{
+        //    this.Subscription = subscription;
+        //    this.Price = (int)subscription;
+        //    PurschaseDay = DateTime.Now;
+        //    ExpirationDay = Expiration(PurschaseDay);
 
-        }
+        //}
 
-        private DateTime Expiration(DateTime PurschaseDay)
-        {
-            PurschaseDay = DateTime.Now;
+        //private DateTime Expiration(DateTime PurschaseDay)
+        //{
+        //    PurschaseDay = DateTime.Now;
 
-            DateTime ExpirationDate;
+        //    DateTime ExpirationDate;
 
-            switch (Subscription)
-            {
-                    case Subscription.Basic:
-                        return ExpirationDate = PurschaseDay.AddDays(7);
+        //    switch (Subscription)
+        //    {
+        //            case Subscription.Basic:
+        //                return ExpirationDate = PurschaseDay.AddDays(7);
 
-                    case Subscription.Silver:
-                        return ExpirationDate = PurschaseDay.AddDays(30);
+        //            case Subscription.Silver:
+        //                return ExpirationDate = PurschaseDay.AddDays(30);
 
-                    case Subscription.Gold:
-                        return ExpirationDate = PurschaseDay.AddDays(180);
+        //            case Subscription.Gold:
+        //                return ExpirationDate = PurschaseDay.AddDays(180);
                     
-                    default:
-                        return DateTime.Now;  
-            }
-        }
+        //            default:
+        //                return DateTime.Now;  
+        //    }
+        //}
 
     }
 }
