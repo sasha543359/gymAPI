@@ -9,7 +9,7 @@
 
     public class CustomerSubscription
     {
-        public int CustomerSubscriptionId { get; set; }
+        public int Id { get; set; }
         public Subscription Subscription { get; set; }
         public int Price { get; set; }
 

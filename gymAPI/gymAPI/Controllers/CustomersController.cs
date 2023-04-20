@@ -41,14 +41,14 @@ namespace gymAPI.Controllers
         public IActionResult CreateCustomer(Customer customerDto)
         {
             var customer = _customerService.CreateCustomer(customerDto);
-            return CreatedAtAction(nameof(GetCustomer), new { id = customer.CustomerId }, customer);
+            return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer);
         }
 
         // PUT api/customers/{id}
         [HttpPut("{id}")]
         public IActionResult UpdateCustomer(int id, Customer customerDto)
         {
-            if (id != customerDto.CustomerId)
+            if (id != customerDto.Id)
             {
                 return BadRequest();
             }

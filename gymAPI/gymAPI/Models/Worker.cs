@@ -1,8 +1,10 @@
-﻿namespace gymAPI.Models
+﻿using gymAPI.Services;
+
+namespace gymAPI.Models
 {
     public class Worker
     {
-        public int WorkerId { get; set; }          // Идентификатор работника
+        public int Id { get; set; }          // Идентификатор работника
         public string FirstName { get; set; }      // Имя
         public string LastName { get; set; }       // Фамилия
         public string Position { get; set; }       // Должность

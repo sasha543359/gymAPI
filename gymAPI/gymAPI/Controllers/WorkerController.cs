@@ -38,14 +38,14 @@ namespace gymAPI.Controllers
             }
 
             var createdWorker = _workerService.Create(worker);
-            return CreatedAtAction(nameof(Get), new { id = createdWorker.WorkerId }, createdWorker);
+            return CreatedAtAction(nameof(Get), new { id = createdWorker.Id }, createdWorker);
         }
 
         // PUT: api/worker/{id}
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Worker worker)
         {
-            if (worker == null || id != worker.WorkerId)
+            if (worker == null || id != worker.Id)
             {
                 return BadRequest();
             }

@@ -26,7 +26,7 @@ namespace gymAPI.Controllers
             // Возвращение CustomerSubscription в качестве DTO
             var customerSubscriptionDto = new
             {
-                CustomerSubscriptionId = customerSubscription.CustomerSubscriptionId,
+                CustomerSubscriptionId = customerSubscription.Id,
                 Subscription = customerSubscription.Subscription,
                 Price = customerSubscription.Price,
                 PurschaseDay = customerSubscription.PurschaseDay,
@@ -46,14 +46,14 @@ namespace gymAPI.Controllers
             // Возвращение созданного CustomerSubscription в качестве DTO
             var customerSubscriptionDto = new
             {
-                CustomerSubscriptionId = createdCustomerSubscription.CustomerSubscriptionId,
+                CustomerSubscriptionId = createdCustomerSubscription.Id,
                 Subscription = createdCustomerSubscription.Subscription,
                 Price = createdCustomerSubscription.Price,
                 PurschaseDay = createdCustomerSubscription.PurschaseDay,
                 ExpirationDay = createdCustomerSubscription.ExpirationDay
             };
 
-            return CreatedAtAction(nameof(Get), new { id = createdCustomerSubscription.CustomerSubscriptionId }, customerSubscriptionDto);
+            return CreatedAtAction(nameof(Get), new { id = createdCustomerSubscription.Id }, customerSubscriptionDto);
         }
 
         // PUT api/customersubscriptions/1
