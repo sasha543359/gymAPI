@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using gymAPI.Services;
+using GymDbContext_.Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using gymAPI.Services;
-using gymAPI.Models;
 
 namespace gymAPI.Controllers
 {
@@ -15,6 +14,7 @@ namespace gymAPI.Controllers
         {
             _workerService = workerService;
         }
+
 
         // GET: api/worker/{id}
         [HttpGet("{id}")]

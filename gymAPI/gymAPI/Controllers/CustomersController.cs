@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using gymAPI.Services;
-using gymAPI.Models;
+using GymDbContext_.Data.Models;
 
 namespace gymAPI.Controllers
 {

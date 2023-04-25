@@ -1,4 +1,4 @@
-﻿using gymAPI.Models;
+﻿using GymDbContext_.Data.Models;
 
 namespace gymAPI.Services
 {

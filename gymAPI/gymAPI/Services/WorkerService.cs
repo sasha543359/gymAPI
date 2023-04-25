@@ -1,6 +1,6 @@
 ﻿namespace gymAPI.Services
 {
-    using gymAPI.Models;
+    using GymDbContext_.Data.Models;
     using System;
     using System.Collections.Generic;
 
