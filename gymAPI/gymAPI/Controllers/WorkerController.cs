@@ -1,5 +1,4 @@
-﻿using gymAPI.Services;
-using GymDbContext_.Data.Models;
+﻿using GymDbContext_.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gymAPI.Controllers
@@ -8,69 +7,57 @@ namespace gymAPI.Controllers
     [ApiController]
     public class WorkerController : ControllerBase
     {
-        private readonly IWorkerService _workerService;
+        private readonly API.GymDbContext _gymDbContext;
 
-        public WorkerController(IWorkerService workerService)
+        public WorkerController(API.GymDbContext gymDbContext)
         {
-            _workerService = workerService;
+           _gymDbContext = gymDbContext;
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<Worker>> GetCustomers()
+        {
+            return _gymDbContext.Workers;
+        }
 
         // GET: api/worker/{id}
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<Worker>> GetById(int id)
         {
-            var worker = _workerService.GetById(id);
-            if (worker == null)
-            {
-                return NotFound();
-            }
-            return Ok(worker);
+            var worker = await _gymDbContext.Workers.FindAsync(id);
+            return worker;
         }
 
         // POST: api/worker
         [HttpPost]
-        public IActionResult Post([FromBody] Worker worker)
+        public async Task<ActionResult> Create(Worker worker)
         {
-            if (worker == null)
-            {
-                return BadRequest();
-            }
-
-            var createdWorker = _workerService.Create(worker);
-            return CreatedAtAction(nameof(Get), new { id = createdWorker.Id }, createdWorker);
+            await _gymDbContext.Workers.AddAsync(worker);
+            await _gymDbContext.SaveChangesAsync();
+            return Ok();
         }
 
         // PUT: api/worker/{id}
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Worker worker)
+        public async Task<ActionResult> UpdateCustomer(int id)
         {
-            if (worker == null || id != worker.Id)
-            {
-                return BadRequest();
-            }
-
-            var existingWorker = _workerService.GetById(id);
-            if (existingWorker == null)
-            {
-                return NotFound();
-            }
-
-            _workerService.Update(id, worker);
-            return NoContent();
+            var worker = await _gymDbContext.Workers.FindAsync(id);
+            _gymDbContext.Workers.Update(worker);
+            await _gymDbContext.SaveChangesAsync();
+            return Ok();
         }
 
         // DELETE: api/worker/{id}
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var worker = _workerService.GetById(id);
+            var worker = await _gymDbContext.Workers.FindAsync(id);
             if (worker == null)
             {
                 return NotFound();
             }
 
-            _workerService.Delete(id);
+            _gymDbContext.Workers.Remove(worker);
             return NoContent();
         }
     }

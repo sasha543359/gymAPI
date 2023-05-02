@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using gymAPI.Services;
 using GymDbContext_.Data.Models;
 
 namespace gymAPI.Controllers
@@ -8,67 +7,54 @@ namespace gymAPI.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomerService _customerService;
+        private readonly API.GymDbContext _gymDbContext;
 
-        public CustomersController(ICustomerService customerService)
+        public CustomersController(API.GymDbContext gymDbContext)
         {
-            _customerService = customerService;
+            _gymDbContext = gymDbContext;
         }
 
         // GET api/customers
         [HttpGet]
-        public IActionResult GetCustomers()
+        public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            var customers = _customerService.GetCustomers();
-            return Ok(customers);
+            return _gymDbContext.Customers;
         }
 
         // GET api/customers/{id}
         [HttpGet("{id}")]
-        public IActionResult GetCustomer(int id)
+        public async Task<ActionResult<Customer>> GetById(int id)
         {
-            var customer = _customerService.GetCustomerById(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return Ok(customer);
+            var customer = await _gymDbContext.Customers.FindAsync(id);
+            return customer;
         }
 
         // POST api/customers
         [HttpPost]
-        public IActionResult CreateCustomer(Customer customerDto)
+       public async Task<ActionResult> Create(Customer customer)
         {
-            var customer = _customerService.CreateCustomer(customerDto);
-            return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer);
+            await _gymDbContext.Customers.AddAsync(customer);
+            await _gymDbContext.SaveChangesAsync();
+            return Ok();
         }
 
         // PUT api/customers/{id}
         [HttpPut("{id}")]
-        public IActionResult UpdateCustomer(int id, Customer customerDto)
+        public async Task<ActionResult> UpdateCustomer([FromBody]Customer customer, int id)
         {
-            if (id != customerDto.Id)
-            {
-                return BadRequest();
-            }
-            var customer = _customerService.UpdateCustomer(id, customerDto);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            customer = await _gymDbContext.Customers.FindAsync(id);
+            _gymDbContext.Customers.Update(customer);
+            await _gymDbContext.SaveChangesAsync();
+            return Ok();
         }
 
         // DELETE api/customers/{id}
         [HttpDelete("{id}")]
-        public IActionResult DeleteCustomer(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var customer = _customerService.DeleteCustomer(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            var customer = await _gymDbContext.Customers.FindAsync(id);
+            _gymDbContext.Customers.Remove(customer);
+            return Ok();
         }
     }
 }

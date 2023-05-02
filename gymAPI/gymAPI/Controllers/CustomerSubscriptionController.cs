@@ -1,5 +1,4 @@
-﻿using gymAPI.Services;
-using GymDbContext_.Data.Models;
+﻿using GymDbContext_.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gymAPI.Controllers
@@ -8,71 +7,47 @@ namespace gymAPI.Controllers
     [ApiController]
     public class CustomerSubscriptionController : ControllerBase
     {
-        private readonly ICustomerSubscriptionService _customerSubscriptionService;
+        private readonly API.GymDbContext _gymDbContext;
 
-        public CustomerSubscriptionController(ICustomerSubscriptionService customerSubscriptionService)
+        public CustomerSubscriptionController(API.GymDbContext gymDbContext)
         {
-            _customerSubscriptionService = customerSubscriptionService;
+            _gymDbContext = gymDbContext;
         }
 
         // GET api/customersubscriptions/1
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<CustomerSubscription>> GetById(int id)
         {
-            // Получение данных о CustomerSubscription из базы данных
-            var customerSubscription = _customerSubscriptionService.GetById(id);
-
-            // Возвращение CustomerSubscription в качестве DTO
-            var customerSubscriptionDto = new
-            {
-                CustomerSubscriptionId = customerSubscription.Id,
-                Subscription = customerSubscription.Subscription,
-                Price = customerSubscription.Price,
-                PurschaseDay = customerSubscription.PurschaseDay,
-                ExpirationDay = customerSubscription.ExpirationDay
-            };
-
-            return Ok(customerSubscriptionDto);
+            var customersubscription = await _gymDbContext.CustomersSubscriptions.FindAsync(id);
+            return customersubscription;
         }
 
         // POST api/customersubscriptions
         [HttpPost]
-        public IActionResult Post([FromBody] CustomerSubscription customerSubscription)
+        public async Task<ActionResult> Create(CustomerSubscription customersubscription)
         {
-            // Создание нового CustomerSubscription
-            var createdCustomerSubscription = _customerSubscriptionService.Create(customerSubscription);
-
-            // Возвращение созданного CustomerSubscription в качестве DTO
-            var customerSubscriptionDto = new
-            {
-                CustomerSubscriptionId = createdCustomerSubscription.Id,
-                Subscription = createdCustomerSubscription.Subscription,
-                Price = createdCustomerSubscription.Price,
-                PurschaseDay = createdCustomerSubscription.PurschaseDay,
-                ExpirationDay = createdCustomerSubscription.ExpirationDay
-            };
-
-            return CreatedAtAction(nameof(Get), new { id = createdCustomerSubscription.Id }, customerSubscriptionDto);
+            await _gymDbContext.CustomersSubscriptions.AddAsync(customersubscription);
+            await _gymDbContext.SaveChangesAsync();
+            return Ok();
         }
 
         // PUT api/customersubscriptions/1
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] CustomerSubscription customerSubscription)
+        public async Task<ActionResult> UpdateCustomer(int id)
         {
-            // Обновление данных о CustomerSubscription
-            _customerSubscriptionService.Update(id, customerSubscription);
-
-            return NoContent();
+            var customersubscription = await _gymDbContext.CustomersSubscriptions.FindAsync(id);
+            _gymDbContext.CustomersSubscriptions.Update(customersubscription);
+            await _gymDbContext.SaveChangesAsync();
+            return Ok();
         }
 
         // DELETE api/customersubscriptions/1
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            // Удаление CustomerSubscription
-            _customerSubscriptionService.Delete(id);
-
-            return NoContent();
+            var customersubscription = await _gymDbContext.CustomersSubscriptions.FindAsync(id);
+            _gymDbContext.CustomersSubscriptions.Remove(customersubscription);
+            return Ok();
         }
     }
 }

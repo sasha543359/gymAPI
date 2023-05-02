@@ -1,4 +1,7 @@
-using gymAPI.Services;
+
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +17,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<ICustomerSubscriptionService, CustomerSubscriptionService>();
-builder.Services.AddScoped<IWorkerService, WorkerService>();
 
+/* DataBase Context Dependency Injection*/
+var connectionString = "Server=DESKTOP-7V70NQI\\SQLEXPRESS;Database=GymDB;trusted_connection=True;TrustServerCertificate=True;";
+builder.Services.AddDbContext<API.GymDbContext>(opt => opt.UseSqlServer(connectionString));
+/*======================================*/
 
 var app = builder.Build();
 
