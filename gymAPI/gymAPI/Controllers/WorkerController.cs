@@ -11,7 +11,7 @@ namespace gymAPI.Controllers
 
         public WorkerController(API.GymDbContext gymDbContext)
         {
-           _gymDbContext = gymDbContext;
+            _gymDbContext = gymDbContext;
         }
 
         [HttpGet]

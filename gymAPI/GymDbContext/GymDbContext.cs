@@ -1,7 +1,4 @@
-﻿using GymDbContext_.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace API
 {
@@ -13,20 +10,14 @@ namespace API
 
         public GymDbContext(DbContextOptions<GymDbContext> dbContextOptions) : base(dbContextOptions)
         {
-            try
-            {
-                var dataBaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
-                if (dataBaseCreator != null)
-                {
-                    if (!dataBaseCreator.CanConnect()) dataBaseCreator.Create();
-                    if (!dataBaseCreator.HasTables()) dataBaseCreator.CreateTables();
-                }
-            }
-            catch (Exception ex)
-            {
 
-                Console.WriteLine(ex.Message);
-            }
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var connectionString = "Server=DESKTOP-7V70NQI\\SQLEXPRESS;Database=Gym;trusted_connection=True;TrustServerCertificate=True;";
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly("API"));
         }
     }
 }

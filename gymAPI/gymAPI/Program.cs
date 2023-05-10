@@ -1,6 +1,5 @@
+using GymDbContext_.Data.Services.CustomerService;
 
-using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,9 +18,10 @@ builder.Services.AddSwaggerGen();
 
 
 /* DataBase Context Dependency Injection*/
-var connectionString = "Server=DESKTOP-7V70NQI\\SQLEXPRESS;Database=GymDB;trusted_connection=True;TrustServerCertificate=True;";
-builder.Services.AddDbContext<API.GymDbContext>(opt => opt.UseSqlServer(connectionString));
+
+builder.Services.AddDbContext<API.GymDbContext>();
 /*======================================*/
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 var app = builder.Build();
 
