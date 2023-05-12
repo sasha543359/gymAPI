@@ -1,6 +1,5 @@
 using GymDbContext_.Data.Services.CustomerService;
-
-
+using GymDbContext_.Data.Services.WorkerService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +21,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<API.GymDbContext>();
 /*======================================*/
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IWorkerService, WorkerService>();
 
 var app = builder.Build();
 
