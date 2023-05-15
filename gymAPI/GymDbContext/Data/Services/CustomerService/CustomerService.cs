@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymDbContext_.Data.Services.CustomerService
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService : IBaseRepository<Customer>
     {
         public readonly GymDbContext _context;
 
@@ -12,31 +12,31 @@ namespace GymDbContext_.Data.Services.CustomerService
             _context = context;
         }
 
-        public async Task<List<Customer>> CreateCustomer(Customer customer)
+        public async Task<Customer> CreateEntity(Customer customer)
         {
 
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
-            return _context.Customers.ToList();
+            return customer;
         }
 
-        public async Task<List<Customer>?> DeleteCustomer(int id)
+        public async Task DeleteEntity(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-                return null;
+
+
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
-            return _context.Customers.ToList();
+
         }
 
-        public async Task<List<Customer>> GetAllCustomers()
+        public async Task<List<Customer>> GetEntities()
         {
             var customers = await _context.Customers.ToListAsync();
             return customers;
         }
 
-        public async Task<Customer?> GetCustomerById(int id)
+        public async Task<Customer> GetEntity(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
@@ -45,7 +45,7 @@ namespace GymDbContext_.Data.Services.CustomerService
             return customer;
         }
 
-        public async Task<List<Customer>?> UpdateCustomer(Customer customer, int id)
+        public async Task<Customer> UpdateEntity(Customer customer, int id)
         {
             var cst = await _context.Customers.FindAsync(id);
             if (cst == null)
@@ -60,7 +60,7 @@ namespace GymDbContext_.Data.Services.CustomerService
 
             await _context.SaveChangesAsync();
 
-            return await _context.Customers.ToListAsync();
+            return cst;
 
 
         }

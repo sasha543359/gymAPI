@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymDbContext_.Data.Services.WorkerService
 {
-    public class WorkerService : IWorkerService
+    public class WorkerService : IBaseRepository<Worker>
     {
 
         public readonly GymDbContext _context;
@@ -13,34 +13,32 @@ namespace GymDbContext_.Data.Services.WorkerService
             _context = context;
         }
 
-        public async Task<List<Worker>> CreateWorker(Worker worker)
+        public async Task<Worker> CreateEntity(Worker worker)
         {
                  await _context.AddAsync(worker);
                  await _context.SaveChangesAsync();
-                 var workers = await _context.Workers.ToListAsync();
                  await _context.SaveChangesAsync();
-                 return workers;
+            return worker;
         }
 
-        public async Task<List<Worker>?> DeleteWorker(int id)
+        public async Task DeleteEntity(int id)
         {
             var worker = await _context.Workers.FindAsync(id);
-            if(worker == null)
-                return null;
+             
              _context.Workers.Remove(worker);
             await _context.SaveChangesAsync();
-            var workers = await _context.Workers.ToListAsync();
-            return workers;
+           
+        
 
         }
 
-        public async Task<List<Worker>> GetAllWorkers()
+        public async Task<List<Worker>> GetEntities()
         {
            var workers = await _context.Workers.ToListAsync();
             return workers;
         }
 
-        public async Task<Worker?> GetWorkerById(int id)
+        public async Task<Worker> GetEntity(int id)
         {
             var worker = await _context.Workers.FindAsync(id);
             if (worker == null)
@@ -48,9 +46,9 @@ namespace GymDbContext_.Data.Services.WorkerService
             return worker;
         }
 
-        public async Task<Worker?> UpdateWorker(Worker worker, int id)
+        public async Task<Worker> UpdateEntity(Worker worker, int id)
         {
-             var wrker = await GetWorkerById(id);
+             var wrker = await GetEntity(id);
             if (wrker == null)
                 return null;
 

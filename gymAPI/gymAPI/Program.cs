@@ -1,4 +1,7 @@
+using GymDbContext_.Data.Models;
+using GymDbContext_.Data.Services;
 using GymDbContext_.Data.Services.CustomerService;
+using GymDbContext_.Data.Services.CustomerSubscriptionService;
 using GymDbContext_.Data.Services.WorkerService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +23,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<API.GymDbContext>();
 /*======================================*/
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IWorkerService, WorkerService>();
+builder.Services.AddScoped<IBaseRepository<Customer>, CustomerService>();
+builder.Services.AddScoped<IBaseRepository<Worker>,WorkerService>();
+builder.Services.AddScoped<IBaseRepository<CustomerSubscription>, CustomerSubscriptionService>();
+
+
 
 var app = builder.Build();
 

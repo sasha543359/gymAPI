@@ -1,4 +1,5 @@
 ﻿using GymDbContext_.Data.Models;
+using GymDbContext_.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gymAPI.Controllers
@@ -7,47 +8,56 @@ namespace gymAPI.Controllers
     [ApiController]
     public class CustomerSubscriptionController : ControllerBase
     {
-        private readonly API.GymDbContext _gymDbContext;
 
-        public CustomerSubscriptionController(API.GymDbContext gymDbContext)
+        private readonly IBaseRepository<CustomerSubscription> _customerSubsriptionService;
+
+        public CustomerSubscriptionController(IBaseRepository<CustomerSubscription> customerSubsriptionService)
         {
-            _gymDbContext = gymDbContext;
+            _customerSubsriptionService = customerSubsriptionService;
         }
 
-        // GET api/customersubscriptions/1
+        // GET: api/customersubscription
+
+        [HttpGet]
+
+        public async Task<ActionResult<List<CustomerSubscription>>> GetSubscriptions()
+        {
+            return Ok(await _customerSubsriptionService.GetEntities());
+        }
+
+        // GET: api/customersubscription/id
+
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerSubscription>> GetById(int id)
         {
-            var customersubscription = await _gymDbContext.CustomersSubscriptions.FindAsync(id);
-            return customersubscription;
+            return Ok(await _customerSubsriptionService.GetEntity(id));
         }
 
-        // POST api/customersubscriptions
+
+        // POST: api/customersubscription
+
         [HttpPost]
-        public async Task<ActionResult> Create(CustomerSubscription customersubscription)
+
+        public async Task<ActionResult<CustomerSubscription>> Post([FromBody] CustomerSubscription customerSubscription)
         {
-            await _gymDbContext.CustomersSubscriptions.AddAsync(customersubscription);
-            await _gymDbContext.SaveChangesAsync();
-            return Ok();
+            return Ok(await _customerSubsriptionService.CreateEntity(customerSubscription));
         }
 
-        // PUT api/customersubscriptions/1
+        // PUT: api/customersubscription/id
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCustomer(int id)
+        public async Task<ActionResult<CustomerSubscription>> Update(CustomerSubscription customerSubscription, int id)
         {
-            var customersubscription = await _gymDbContext.CustomersSubscriptions.FindAsync(id);
-            _gymDbContext.CustomersSubscriptions.Update(customersubscription);
-            await _gymDbContext.SaveChangesAsync();
+            return Ok(await _customerSubsriptionService.UpdateEntity(customerSubscription, id));
+        }
+
+        // DELETE: api/customersubscription/id
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<CustomerSubscription>> Delete(int id)
+        {
+            await _customerSubsriptionService.DeleteEntity(id);
             return Ok();
         }
 
-        // DELETE api/customersubscriptions/1
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var customersubscription = await _gymDbContext.CustomersSubscriptions.FindAsync(id);
-            _gymDbContext.CustomersSubscriptions.Remove(customersubscription);
-            return Ok();
-        }
+
     }
 }
