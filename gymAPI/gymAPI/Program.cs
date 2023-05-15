@@ -1,4 +1,8 @@
-using gymAPI.Services;
+using GymDbContext_.Data.Models;
+using GymDbContext_.Data.Services;
+using GymDbContext_.Data.Services.CustomerService;
+using GymDbContext_.Data.Services.CustomerSubscriptionService;
+using GymDbContext_.Data.Services.WorkerService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +18,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<ICustomerSubscriptionService, CustomerSubscriptionService>();
-builder.Services.AddScoped<IWorkerService, WorkerService>();
+
+/* DataBase Context Dependency Injection*/
+
+builder.Services.AddDbContext<API.GymDbContext>();
+/*======================================*/
+builder.Services.AddScoped<IBaseRepository<Customer>, CustomerService>();
+builder.Services.AddScoped<IBaseRepository<Worker>,WorkerService>();
+builder.Services.AddScoped<IBaseRepository<CustomerSubscription>, CustomerSubscriptionService>();
+
 
 
 var app = builder.Build();

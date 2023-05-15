@@ -1,5 +1,5 @@
-﻿using gymAPI.Services;
-using GymDbContext_.Data.Models;
+﻿using GymDbContext_.Data.Models;
+using GymDbContext_.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gymAPI.Controllers
@@ -8,71 +8,56 @@ namespace gymAPI.Controllers
     [ApiController]
     public class CustomerSubscriptionController : ControllerBase
     {
-        private readonly ICustomerSubscriptionService _customerSubscriptionService;
 
-        public CustomerSubscriptionController(ICustomerSubscriptionService customerSubscriptionService)
+        private readonly IBaseRepository<CustomerSubscription> _customerSubsriptionService;
+
+        public CustomerSubscriptionController(IBaseRepository<CustomerSubscription> customerSubsriptionService)
         {
-            _customerSubscriptionService = customerSubscriptionService;
+            _customerSubsriptionService = customerSubsriptionService;
         }
 
-        // GET api/customersubscriptions/1
+        // GET: api/customersubscription
+
+        [HttpGet]
+
+        public async Task<ActionResult<List<CustomerSubscription>>> GetSubscriptions()
+        {
+            return Ok(await _customerSubsriptionService.GetEntities());
+        }
+
+        // GET: api/customersubscription/id
+
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<ActionResult<CustomerSubscription>> GetById(int id)
         {
-            // Получение данных о CustomerSubscription из базы данных
-            var customerSubscription = _customerSubscriptionService.GetById(id);
-
-            // Возвращение CustomerSubscription в качестве DTO
-            var customerSubscriptionDto = new
-            {
-                CustomerSubscriptionId = customerSubscription.Id,
-                Subscription = customerSubscription.Subscription,
-                Price = customerSubscription.Price,
-                PurschaseDay = customerSubscription.PurschaseDay,
-                ExpirationDay = customerSubscription.ExpirationDay
-            };
-
-            return Ok(customerSubscriptionDto);
+            return Ok(await _customerSubsriptionService.GetEntity(id));
         }
 
-        // POST api/customersubscriptions
+
+        // POST: api/customersubscription
+
         [HttpPost]
-        public IActionResult Post([FromBody] CustomerSubscription customerSubscription)
+
+        public async Task<ActionResult<CustomerSubscription>> Post([FromBody] CustomerSubscription customerSubscription)
         {
-            // Создание нового CustomerSubscription
-            var createdCustomerSubscription = _customerSubscriptionService.Create(customerSubscription);
-
-            // Возвращение созданного CustomerSubscription в качестве DTO
-            var customerSubscriptionDto = new
-            {
-                CustomerSubscriptionId = createdCustomerSubscription.Id,
-                Subscription = createdCustomerSubscription.Subscription,
-                Price = createdCustomerSubscription.Price,
-                PurschaseDay = createdCustomerSubscription.PurschaseDay,
-                ExpirationDay = createdCustomerSubscription.ExpirationDay
-            };
-
-            return CreatedAtAction(nameof(Get), new { id = createdCustomerSubscription.Id }, customerSubscriptionDto);
+            return Ok(await _customerSubsriptionService.CreateEntity(customerSubscription));
         }
 
-        // PUT api/customersubscriptions/1
+        // PUT: api/customersubscription/id
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] CustomerSubscription customerSubscription)
+        public async Task<ActionResult<CustomerSubscription>> Update(CustomerSubscription customerSubscription, int id)
         {
-            // Обновление данных о CustomerSubscription
-            _customerSubscriptionService.Update(id, customerSubscription);
-
-            return NoContent();
+            return Ok(await _customerSubsriptionService.UpdateEntity(customerSubscription, id));
         }
 
-        // DELETE api/customersubscriptions/1
+        // DELETE: api/customersubscription/id
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<ActionResult<CustomerSubscription>> Delete(int id)
         {
-            // Удаление CustomerSubscription
-            _customerSubscriptionService.Delete(id);
-
-            return NoContent();
+            await _customerSubsriptionService.DeleteEntity(id);
+            return Ok();
         }
+
+
     }
 }
