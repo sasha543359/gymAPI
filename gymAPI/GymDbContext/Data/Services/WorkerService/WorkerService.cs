@@ -15,26 +15,26 @@ namespace GymDbContext_.Data.Services.WorkerService
 
         public async Task<Worker> CreateEntity(Worker worker)
         {
-                 await _context.AddAsync(worker);
-                 await _context.SaveChangesAsync();
-                 await _context.SaveChangesAsync();
+            await _context.AddAsync(worker);
+            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return worker;
         }
 
         public async Task DeleteEntity(int id)
         {
             var worker = await _context.Workers.FindAsync(id);
-             
-             _context.Workers.Remove(worker);
+
+            _context.Workers.Remove(worker);
             await _context.SaveChangesAsync();
-           
-        
+
+
 
         }
 
         public async Task<List<Worker>> GetEntities()
         {
-           var workers = await _context.Workers.ToListAsync();
+            var workers = await _context.Workers.ToListAsync();
             return workers;
         }
 
@@ -48,7 +48,7 @@ namespace GymDbContext_.Data.Services.WorkerService
 
         public async Task<Worker> UpdateEntity(Worker worker, int id)
         {
-             var wrker = await GetEntity(id);
+            var wrker = await GetEntity(id);
             if (wrker == null)
                 return null;
 

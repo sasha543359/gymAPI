@@ -1,6 +1,5 @@
 ﻿using GymDbContext_.Data.Models;
 using GymDbContext_.Data.Services;
-using GymDbContext_.Data.Services.CustomerService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gymAPI.Controllers
@@ -57,7 +56,7 @@ namespace gymAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-             await _customerService.DeleteEntity(id);
+            await _customerService.DeleteEntity(id);
             return Ok();
         }
     }
