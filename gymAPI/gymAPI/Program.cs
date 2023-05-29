@@ -3,8 +3,17 @@ using GymDbContext_.Data.Services;
 using GymDbContext_.Data.Services.CustomerService;
 using GymDbContext_.Data.Services.CustomerSubscriptionService;
 using GymDbContext_.Data.Services.WorkerService;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .CreateLogger();
+
+Log.Logger.Information("Logging is working");
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Configuration.AddJsonFile(path: "appsettings.json", optional: true);

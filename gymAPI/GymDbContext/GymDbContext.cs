@@ -18,9 +18,11 @@ namespace API
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             var connectionString = _configuration.GetValue<string>("ConnectionStrings:myDb1");
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly("API"));
+                base.OnConfiguring(optionsBuilder);
+                optionsBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly("API"));
+            
         }
     }
 }
