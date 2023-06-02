@@ -19,23 +19,27 @@ namespace gymAPI.Controllers
 
         // GET api/customers
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Customer>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<Customer>>> GetCustomers()
         {
             try
             {
-                return await _customerService.GetEntities();
-
+                var customer = await _customerService.GetEntities();
+                if (customer == null) return NotFound();
+                return Ok(customer);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error($"Get customers has failed \n {ex.Message}");
                 return Problem(statusCode: 500, detail: ex.Message);
-
             }
         }
 
         // GET api/customers/{id}
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Customer))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Customer>> GetById(int id)
         {
             try
@@ -49,18 +53,22 @@ namespace gymAPI.Controllers
             {
                 Log.Error($"Get customer has failed \n {ex.Message}");
                 return Problem(statusCode: 500, detail: ex.Message);
-
             }
-            
+
         }
 
         // POST api/customers
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Customer))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Create([FromBody] Customer customer)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
                 var result = await _customerService.CreateEntity(customer);
+                if (result == null) return NoContent();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -73,19 +81,21 @@ namespace gymAPI.Controllers
 
         // PUT api/customers/{id}
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Customer))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UpdateCustomer([FromBody] Customer customer, int id)
         {
-
-
             try
             {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
                 var result = await _customerService.UpdateEntity(customer, id);
-
-                return Ok(result);
+                if (result == null) return NotFound();
+                return Accepted(result);
             }
             catch (Exception ex)
             {
-
                 Log.Error($"Update customer has failed \n {ex.Message}");
                 return Problem(statusCode: 500, detail: ex.Message);
             }
@@ -93,12 +103,13 @@ namespace gymAPI.Controllers
 
         // DELETE api/customers/{id}
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
                 await _customerService.DeleteEntity(id);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
