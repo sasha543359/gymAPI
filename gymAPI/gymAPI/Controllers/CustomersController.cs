@@ -47,7 +47,7 @@ namespace gymAPI.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"Get customers has failed \n {ex.Message}");
+                Log.Error($"Get customer has failed \n {ex.Message}");
                 return Problem(statusCode: 500, detail: ex.Message);
 
             }
@@ -66,7 +66,7 @@ namespace gymAPI.Controllers
             catch (Exception ex)
             {
 
-                Log.Error($"Get customers has failed \n {ex.Message}");
+                Log.Error($"Create customer has failed \n {ex.Message}");
                 return Problem(statusCode: 500, detail: ex.Message);
             }
         }
@@ -86,7 +86,7 @@ namespace gymAPI.Controllers
             catch (Exception ex)
             {
 
-                Log.Error($"Get customers has failed \n {ex.Message}");
+                Log.Error($"Update customer has failed \n {ex.Message}");
                 return Problem(statusCode: 500, detail: ex.Message);
             }
         }
@@ -103,7 +103,7 @@ namespace gymAPI.Controllers
             catch (Exception ex)
             {
 
-                Log.Error($"Get customers has failed \n {ex.Message}");
+                Log.Error($"Delete customer has failed \n {ex.Message}");
                 return Problem(statusCode: 500, detail: ex.Message);
             }
         }

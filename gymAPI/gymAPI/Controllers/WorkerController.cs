@@ -1,7 +1,7 @@
 ﻿using GymDbContext_.Data.Models;
 using GymDbContext_.Data.Services;
-using GymDbContext_.Data.Services.WorkerService;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace gymAPI.Controllers
 {
@@ -20,7 +20,16 @@ namespace gymAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Worker>>> GetAllWorkers()
         {
-            return await _workerService.GetEntities();
+            try
+            {
+                return await _workerService.GetEntities();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Get workers has failed \n {ex.Message}");
+                return Problem(statusCode: 500, detail: ex.Message);
+
+            }
 
 
         }
@@ -30,12 +39,21 @@ namespace gymAPI.Controllers
 
         public async Task<ActionResult<Worker>> GetWorkerById(int id)
         {
-            var worker = await _workerService.GetEntity(id);
+            try
+            {
+                var worker = await _workerService.GetEntity(id);
 
-            if (worker == null)
-                return NotFound("Worker with this ID doesn't exist");
+                if (worker == null)
+                    return NotFound("Worker with this ID doesn't exist");
 
-            return Ok(worker);
+                return Ok(worker);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Get worker by id has failed \n {ex.Message}");
+                return Problem(statusCode: 500, detail: ex.Message);
+
+            }
 
 
         }
@@ -44,11 +62,20 @@ namespace gymAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Worker>> UpdateWorkerById([FromBody] Worker worker, int id)
         {
-            var wrker = await _workerService.UpdateEntity(worker, id);
+            try
+            {
+                var wrker = await _workerService.UpdateEntity(worker, id);
 
-            if (wrker == null)
-                return NotFound("Worker wasn't updated because worker with this ID does't exist");
-            return Ok(wrker);
+                if (wrker == null)
+                    return NotFound("Worker wasn't updated because worker with this ID does't exist");
+                return Ok(wrker);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Update worker has failed \n {ex.Message}");
+                return Problem(statusCode: 500, detail: ex.Message);
+
+            }
         }
 
 
@@ -56,9 +83,18 @@ namespace gymAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Worker>> CreateWorker([FromBody] Worker worker)
         {
-            var wrker = await _workerService.CreateEntity(worker);
-            return Ok(wrker);
 
+            try
+            {
+                var wrker = await _workerService.CreateEntity(worker);
+                return Ok(wrker);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Create worker has failed \n {ex.Message}");
+                return Problem(statusCode: 500, detail: ex.Message);
+
+            }
 
         }
 
@@ -66,9 +102,18 @@ namespace gymAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Worker>> DeleteWorkerById(int id)
         {
-            await _workerService.DeleteEntity(id);
-         
-            return Ok();
+            try
+            {
+                await _workerService.DeleteEntity(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Delete worker has failed \n {ex.Message}");
+                return Problem(statusCode: 500, detail: ex.Message);
+
+            }
 
         }
     }
