@@ -12,7 +12,7 @@ namespace GymDbContext_.Data.Services.CustomerSubscriptionService
             this.gymDbContext = gymDbContext;
         }
 
-        public async Task<List<CustomerSubscription>> GetEntities() 
+        public async Task<List<CustomerSubscription>> GetEntities()
         {
             return await gymDbContext.CustomersSubscriptions.ToListAsync();
         }
@@ -45,13 +45,13 @@ namespace GymDbContext_.Data.Services.CustomerSubscriptionService
         public async Task DeleteEntity(int id)
         {
             var customersubscription = await gymDbContext.CustomersSubscriptions.FindAsync(id);
-            if(customersubscription != null)
-                 gymDbContext.Remove(customersubscription);
+            if (customersubscription != null)
+                gymDbContext.Remove(customersubscription);
             await gymDbContext.SaveChangesAsync();
 
 
 
-           
+
         }
 
         public async Task<CustomerSubscription> CreateEntity(CustomerSubscription customerSubscription)
