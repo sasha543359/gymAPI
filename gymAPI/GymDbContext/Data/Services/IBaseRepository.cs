@@ -1,16 +1,14 @@
-﻿namespace GymDbContext_.Data.Services
+﻿namespace GymDbContext_.Data.Services;
+
+public interface IBaseRepository<T>
 {
-    public interface IBaseRepository<T>
-    {
-        Task<List<T>> GetEntities();
+    Task<List<T>> GetEntities();
 
-        Task<T> GetEntity(int id);
+    Task<T> GetEntity(int id);
 
-        Task<T> UpdateEntity(T entity, int id);
+    Task<T> UpdateEntity(T entity, int id);
 
-        Task DeleteEntity(int id);
+    Task DeleteEntity(int id);
 
-        Task<T> CreateEntity(T entity);
-
-    }
+    Task<T> CreateEntity(T entity);
 }

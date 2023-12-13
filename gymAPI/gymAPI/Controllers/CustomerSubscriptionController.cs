@@ -3,118 +3,117 @@ using GymDbContext_.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
-namespace gymAPI.Controllers
+namespace gymAPI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CustomerSubscriptionController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CustomerSubscriptionController : ControllerBase
+
+    private readonly IBaseRepository<CustomerSubscription> _customerSubsriptionService;
+
+    public CustomerSubscriptionController(IBaseRepository<CustomerSubscription> customerSubsriptionService)
     {
+        _customerSubsriptionService = customerSubsriptionService;
+    }
 
-        private readonly IBaseRepository<CustomerSubscription> _customerSubsriptionService;
-
-        public CustomerSubscriptionController(IBaseRepository<CustomerSubscription> customerSubsriptionService)
+    // GET: api/customersubscription
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CustomerSubscription>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<CustomerSubscription>>> GetSubscriptions()
+    {
+        try
         {
-            _customerSubsriptionService = customerSubsriptionService;
+            var subs = await _customerSubsriptionService.GetEntities();
+            if (subs == null) return NotFound();
+
+            return Ok(subs);
         }
-
-        // GET: api/customersubscription
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CustomerSubscription>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<CustomerSubscription>>> GetSubscriptions()
+        catch (Exception ex)
         {
-            try
-            {
-                var subs = await _customerSubsriptionService.GetEntities();
-                if (subs == null) return NotFound();
-
-                return Ok(subs);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Get subscriptions has failed \n {ex.Message}");
-                return Problem(statusCode: 500, detail: ex.Message);
-            }
+            Log.Error($"Get subscriptions has failed \n {ex.Message}");
+            return Problem(statusCode: 500, detail: ex.Message);
         }
+    }
 
-        // GET: api/customersubscription/id
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CustomerSubscription))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CustomerSubscription>> GetById(int id)
+    // GET: api/customersubscription/id
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CustomerSubscription))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CustomerSubscription>> GetById(int id)
+    {
+        try
         {
-            try
-            {
-                var sub = await _customerSubsriptionService.GetEntity(id);
-                if (sub == null) return NotFound();
-                return Ok(sub);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Get subscription by id has failed \n {ex.Message}");
-                return Problem(statusCode: 500, detail: ex.Message);
-            }
+            var sub = await _customerSubsriptionService.GetEntity(id);
+            if (sub == null) return NotFound();
+            return Ok(sub);
         }
-
-        // POST: api/customersubscription
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CustomerSubscription))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CustomerSubscription>> Post([FromBody] CustomerSubscription customerSubscription)
+        catch (Exception ex)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-                return Ok(await _customerSubsriptionService.CreateEntity(customerSubscription));
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Post subscription has failed \n {ex.Message}");
-                return Problem(statusCode: 500, detail: ex.Message);
-            }
+            Log.Error($"Get subscription by id has failed \n {ex.Message}");
+            return Problem(statusCode: 500, detail: ex.Message);
         }
+    }
 
-        // PUT: api/customersubscription/id
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Worker))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CustomerSubscription>> Update(CustomerSubscription customerSubscription, int id)
+    // POST: api/customersubscription
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CustomerSubscription))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CustomerSubscription>> Post([FromBody] CustomerSubscription customerSubscription)
+    {
+        try
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-                var subs = await _customerSubsriptionService.UpdateEntity(customerSubscription, id);
-                if (subs == null) return NotFound();
-                return Accepted();
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Update subscription has failed \n {ex.Message}");
-                return Problem(statusCode: 500, detail: ex.Message);
-
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(await _customerSubsriptionService.CreateEntity(customerSubscription));
         }
-
-        // DELETE: api/customersubscription/id
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<CustomerSubscription>> Delete(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                await _customerSubsriptionService.DeleteEntity(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Delete subscription has failed \n {ex.Message}");
-                return Problem(statusCode: 500, detail: ex.Message);
+            Log.Error($"Post subscription has failed \n {ex.Message}");
+            return Problem(statusCode: 500, detail: ex.Message);
+        }
+    }
 
-            }
+    // PUT: api/customersubscription/id
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Worker))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CustomerSubscription>> Update(CustomerSubscription customerSubscription, int id)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var subs = await _customerSubsriptionService.UpdateEntity(customerSubscription, id);
+            if (subs == null) return NotFound();
+            return Accepted();
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Update subscription has failed \n {ex.Message}");
+            return Problem(statusCode: 500, detail: ex.Message);
+
+        }
+    }
+
+    // DELETE: api/customersubscription/id
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult<CustomerSubscription>> Delete(int id)
+    {
+        try
+        {
+            await _customerSubsriptionService.DeleteEntity(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Delete subscription has failed \n {ex.Message}");
+            return Problem(statusCode: 500, detail: ex.Message);
+
         }
     }
 }

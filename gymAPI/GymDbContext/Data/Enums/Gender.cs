@@ -1,9 +1,8 @@
-﻿namespace GymDbContext_.Data.Enums
+﻿namespace GymDbContext_.Data.Enums;
+
+public enum Gender
 {
-    public enum Gender
-    {
-        Male,
-        Female,
-        Transgender
-    }
+    Male,
+    Female,
+    Transgender
 }
