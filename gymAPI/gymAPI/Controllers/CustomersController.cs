@@ -1,10 +1,12 @@
 ﻿using GymDbContext_.Data.Models;
 using GymDbContext_.Data.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace gymAPI.Controllers;
 
+[Authorize(Policy = "MustBeAdmin")]
 [Route("api/[controller]")]
 [ApiController]
 public class CustomersController : ControllerBase
