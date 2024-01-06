@@ -6,7 +6,7 @@ using Serilog;
 
 namespace gymAPI.Controllers;
 
-[Authorize(Policy = "MustBeAdmin")]
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class CustomersController : ControllerBase

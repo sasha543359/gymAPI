@@ -1,5 +1,6 @@
 ﻿using GymDbContext_.Data.Models;
 using GymDbContext_.Data.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -58,6 +59,7 @@ public class CustomerSubscriptionController : ControllerBase
 
     // POST: api/customersubscription
 
+    [Authorize]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CustomerSubscription))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
